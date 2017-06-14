@@ -88,11 +88,14 @@ public class Controller {
     private XYChart.Series[] setOfSeriesForSpectrum;
     private XYChart.Series[] setOfSeriesForSpectra; //series cannot be reused. so have to create new instances of series
     private XYChart.Series seriesBySNV;
-    private XYChart.Series seriesByPLS;
+    private XYChart.Series seriesBySNV_PLS;
+    private XYChart.Series seriesByNone_PLS;
     private boolean isStopped;
+    private double[][] noPre_ProcesingResult;
     private double[][] SNVResult;
     private double[][] realTimeConcentration;
-    private double[][] historicalConcentration;
+    private double[][] historicalConcentrationBySNV;
+    private double[][] historicalConcentrationByNone;
 
     @FXML
     /**
@@ -106,7 +109,8 @@ public class Controller {
         this.wavelength=Spectrum_Input.getWavelength();
         this.numberOfVariables=Spectrum_Input.getNumberOfVariables();
         //System.out.println(this.wavelength[0]+"---"+this.wavelength[1]+"---"+this.spectra[0][0]+"---"+this.spectra[0][1]);
-        this.historicalConcentration=new double[1][this.spectra.length];
+        this.historicalConcentrationBySNV=new double[1][this.spectra.length];
+        this.historicalConcentrationByNone=new double[1][this.spectra.length];
     }
 
     @FXML
@@ -120,13 +124,14 @@ public class Controller {
         if(event.getSource()==turnOnButton){
             //create instances for series.
             this.setOfSeriesForSpectrum = new XYChart.Series[this.spectra.length];
-            System.out.println("------------------1--------------------");
+            //System.out.println("------------------1--------------------");
             for(int i=0;i<this.spectra.length;i++){
                 this.setOfSeriesForSpectrum[i]=new XYChart.Series();
                 for(int j=0;j<numberOfVariables;j++){
                     this.setOfSeriesForSpectrum[i].getData().add(new XYChart.Data(this.wavelength[j],this.spectra[i][j]));
                 }
             }
+            System.out.println("Turn On");
         }
         //----------------------------------------for run button----------------------------------------------
         else if(event.getSource()==runButton) {
@@ -147,7 +152,7 @@ public class Controller {
                                 setOfSeriesForSpectrum[indexOfSpectra].setName("Spectrum " + (indexOfSpectra + 1));
                                 spectrumChart.getData().clear();
                                 spectrumChart.getData().add(setOfSeriesForSpectrum[indexOfSpectra]);
-                                System.out.println("------------------2--------------------");
+                                //System.out.println("------------------2--------------------");
                                 try {
             //----------------------------------------------Pre-processing-----------------------------------------
                                     pre_Processing();
@@ -156,7 +161,7 @@ public class Controller {
                                 } catch (MWException e) {
                                     e.printStackTrace();
                                 }
-                                System.out.println("------------------3--------------------");
+                                //System.out.println("------------------3--------------------");
                                 indexOfSpectra++;
                             }
                             //condition to stop timer
@@ -170,7 +175,7 @@ public class Controller {
                 }
             };
             //timer execution delay:0ms; timer execution duration:5s
-            timer.schedule(tt, 0*1000, 5*1000);
+            timer.schedule(tt, 0*1000, 10*1000);
             //execution delay:0s; execution period:15s
 
         }
@@ -191,13 +196,14 @@ public class Controller {
      * Pre-processing
      */
     public void pre_Processing() throws MWException {
-        System.out.println("------------------4--------------------");
+        //System.out.println("------------------4--------------------");
         Pre_Processing p=new Pre_Processing(this.spectra[indexOfSpectra]);
+        //-------------------------SNV---------------------------------
         p.pre_ProcessingBySNV();
         SNVResult=p.getSNVResult();
         //display the spectrum pre-processed by SNV
         seriesBySNV=new XYChart.Series();
-        seriesBySNV.setName("Spectrum " + (indexOfSpectra + 1));
+        seriesBySNV.setName("Spectrum(SNV) " + (indexOfSpectra + 1));
         for(int i=0;i<this.SNVResult[0].length;i++){
           seriesBySNV.getData().add(new XYChart.Data(wavelength[i],SNVResult[0][i]));
        }
@@ -210,19 +216,39 @@ public class Controller {
      * Multivariate Calibration
      */
     public void multivariate_Calibration() throws MWException {
-        PLS_Algorithm pls=new PLS_Algorithm(SNVResult);
-        realTimeConcentration=pls.getConcentration();
-        historicalConcentration[0][indexOfSpectra]=realTimeConcentration[0][0];
-        //display concentration on scatter chart
-        seriesByPLS=new XYChart.Series();
-        seriesByPLS.setName("Urea");
-        for(int i=0;i<indexOfSpectra+1;i++) {
-            seriesByPLS.getData().add(new XYChart.Data(i, historicalConcentration[0][i]));
+        //--------------------------No Pre-Processing-------------------------
+        //convert the one-dimensional double array storing real-time spectrum into two-dimensional double array
+        noPre_ProcesingResult=new double[1][numberOfVariables];
+        for(int i=0;i<numberOfVariables;i++) {
+            noPre_ProcesingResult[0][i]=spectra[indexOfSpectra][i];
         }
-        System.out.println("------------------5--------------------");
+        //use PLS without pre-processing
+        PLS_Algorithm pls=new PLS_Algorithm(noPre_ProcesingResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationByNone[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesByNone_PLS=new XYChart.Series();
+        seriesByNone_PLS.setName("Urea(None)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesByNone_PLS.getData().add(new XYChart.Data(i, historicalConcentrationByNone[0][i]));
+        }
+        System.out.println("No Pre-Processing_PLS done");
+        //-----------------------------------------With Pro-Processing----------------------------------------------
+        //----------------------------------------------SNV-------------------------------------------------------
+        pls=new PLS_Algorithm(SNVResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationBySNV[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesBySNV_PLS=new XYChart.Series();
+        seriesBySNV_PLS.setName("Urea(SNV)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesBySNV_PLS.getData().add(new XYChart.Data(i, historicalConcentrationBySNV[0][i]));
+        }
+        System.out.println("SNV_PLS done");
+        //System.out.println("------------------5--------------------");
+        //display concentration on scatter chart
         concentrationChart.getData().clear();
-        System.out.println("------------------6--------------------");
-        concentrationChart.getData().add(seriesByPLS);
+        concentrationChart.getData().addAll(seriesByNone_PLS,seriesBySNV_PLS);
         System.out.println("Multivariate calibration done");
     }
 }
