@@ -206,7 +206,7 @@ public class Controller {
                 }
             };
             //timer execution delay:0ms; timer execution duration:5s
-            timer.schedule(tt, 0*1000, 20*1000);
+            timer.schedule(tt, 0*1000, 25*1000);
             //execution delay:0s; execution period:15s
 
         }
@@ -277,7 +277,6 @@ public class Controller {
         for(int i=0;i<this.SGResult[0].length;i++){
             seriesBySG.getData().add(new XYChart.Data(wavelength[i],SGResult[0][i]));
         }
-        /*
         //------------------------------MSC---------------------------
         p.pre_ProcessingByMSC();
         MSCResult=p.getMSCResult();
@@ -286,10 +285,10 @@ public class Controller {
         for(int i=0;i<this.MSCResult[0].length;i++){
             seriesByMSC.getData().add(new XYChart.Data(wavelength[i],MSCResult[0][i]));
         }
-        */
+
         //display pre-processed spectrum on line chart
         pretreatedSpectrumChart.getData().clear();
-        pretreatedSpectrumChart.getData().addAll(seriesBySNV,seriesByMeanCentering,seriesByAutoscaling,seriesByNormalization,seriesByMWS,seriesBySG);
+        pretreatedSpectrumChart.getData().addAll(seriesBySNV,seriesByMeanCentering,seriesByAutoscaling,seriesByNormalization,seriesByMWS,seriesBySG,seriesByMSC);
         System.out.println("-----------------------Pre-processing done---------------------------");
     }
 
@@ -382,7 +381,7 @@ public class Controller {
         }
         System.out.println("SG_PLS done");
         //----------------------------------------------MSC-------------------------------------------------------
-        /*
+
         pls=new PLS_Algorithm(MSCResult);
         realTimeConcentration=pls.getConcentration();
         historicalConcentrationByMSC[0][indexOfSpectra]=realTimeConcentration[0][0];
@@ -393,11 +392,10 @@ public class Controller {
             seriesByMSC_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByMSC[0][i]));
         }
         System.out.println("MSC_PLS done");
-        */
 
         //display concentration on scatter chart
         concentrationChart.getData().clear();
-        concentrationChart.getData().addAll(seriesByNone_PLS,seriesBySNV_PLS,seriesByMeanCentering_PLS,seriesByAutoscaling_PLS,seriesByNormalization_PLS,seriesByMWS_PLS,seriesBySG_PLS);
+        concentrationChart.getData().addAll(seriesByNone_PLS,seriesBySNV_PLS,seriesByMeanCentering_PLS,seriesByAutoscaling_PLS,seriesByNormalization_PLS,seriesByMWS_PLS,seriesBySG_PLS,seriesByMSC_PLS);
         System.out.println("---------------------Multivariate calibration done--------------------------");
     }
 }
