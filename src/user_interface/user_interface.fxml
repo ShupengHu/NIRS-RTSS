@@ -62,7 +62,7 @@
             <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onButtonClick" text="Stop" />
          </items>
       </ToolBar>
-      <ScatterChart fx:id="concentrationChart" layoutX="1040.0" layoutY="619.0" prefHeight="267.0" prefWidth="546.0" title="Concentration">
+      <ScatterChart fx:id="concentrationChart" layoutX="717.0" layoutY="531.0" prefHeight="309.0" prefWidth="800.0" title="Concentration">
         <xAxis>
           <NumberAxis fx:id="concentrationXAxis" side="BOTTOM" />
         </xAxis>

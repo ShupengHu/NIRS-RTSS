@@ -1,5 +1,6 @@
 package user_interface;
 
+import MWS_MATLAB.MWS;
 import com.mathworks.toolbox.javabuilder.MWException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -88,13 +89,37 @@ public class Controller {
     private XYChart.Series[] setOfSeriesForSpectrum;
     private XYChart.Series[] setOfSeriesForSpectra; //series cannot be reused. so have to create new instances of series
     private XYChart.Series seriesBySNV;
+    private XYChart.Series seriesByMeanCentering;
+    private XYChart.Series seriesByAutoscaling;
+    private XYChart.Series seriesByNormalization;
+    private XYChart.Series seriesByMWS;
+    private XYChart.Series seriesBySG;
+    private XYChart.Series seriesByMSC;
     private XYChart.Series seriesBySNV_PLS;
+    private XYChart.Series seriesByMeanCentering_PLS;
+    private XYChart.Series seriesByAutoscaling_PLS;
+    private XYChart.Series seriesByNormalization_PLS;
+    private XYChart.Series seriesByMWS_PLS;
+    private XYChart.Series seriesBySG_PLS;
+    private XYChart.Series seriesByMSC_PLS;
     private XYChart.Series seriesByNone_PLS;
     private boolean isStopped;
     private double[][] noPre_ProcesingResult;
     private double[][] SNVResult;
+    private double[][] MeanCenteringResult;
+    private double[][] AutoscalingResult;
+    private double[][] NormalizationResult;
+    private double[][] MWSResult;
+    private double[][] SGResult;
+    private double[][] MSCResult;
     private double[][] realTimeConcentration;
     private double[][] historicalConcentrationBySNV;
+    private double[][] historicalConcentrationByMeanCentering;
+    private double[][] historicalConcentrationByAutoscaling;
+    private double[][] historicalConcentrationByNormalization;
+    private double[][] historicalConcentrationByMWS;
+    private double[][] historicalConcentrationBySG;
+    private double[][] historicalConcentrationByMSC;
     private double[][] historicalConcentrationByNone;
 
     @FXML
@@ -110,6 +135,12 @@ public class Controller {
         this.numberOfVariables=Spectrum_Input.getNumberOfVariables();
         //System.out.println(this.wavelength[0]+"---"+this.wavelength[1]+"---"+this.spectra[0][0]+"---"+this.spectra[0][1]);
         this.historicalConcentrationBySNV=new double[1][this.spectra.length];
+        this.historicalConcentrationByMeanCentering=new double[1][this.spectra.length];
+        this.historicalConcentrationByAutoscaling=new double[1][this.spectra.length];
+        this.historicalConcentrationByNormalization=new double[1][this.spectra.length];
+        this.historicalConcentrationByMWS=new double[1][this.spectra.length];
+        this.historicalConcentrationBySG=new double[1][this.spectra.length];
+        this.historicalConcentrationByMSC=new double[1][this.spectra.length];
         this.historicalConcentrationByNone=new double[1][this.spectra.length];
     }
 
@@ -175,7 +206,7 @@ public class Controller {
                 }
             };
             //timer execution delay:0ms; timer execution duration:5s
-            timer.schedule(tt, 0*1000, 10*1000);
+            timer.schedule(tt, 0*1000, 20*1000);
             //execution delay:0s; execution period:15s
 
         }
@@ -201,15 +232,65 @@ public class Controller {
         //-------------------------SNV---------------------------------
         p.pre_ProcessingBySNV();
         SNVResult=p.getSNVResult();
-        //display the spectrum pre-processed by SNV
         seriesBySNV=new XYChart.Series();
         seriesBySNV.setName("Spectrum(SNV) " + (indexOfSpectra + 1));
         for(int i=0;i<this.SNVResult[0].length;i++){
           seriesBySNV.getData().add(new XYChart.Data(wavelength[i],SNVResult[0][i]));
        }
+        //------------------------- Mean Centering---------------------------------
+        p.pre_ProcessingByMean_Centering();
+        MeanCenteringResult=p.getMean_CenteringResult();
+        seriesByMeanCentering=new XYChart.Series();
+        seriesByMeanCentering.setName("Spectrum(MeanCentering) " + (indexOfSpectra + 1));
+        for(int i=0;i<this.MeanCenteringResult[0].length;i++){
+            seriesByMeanCentering.getData().add(new XYChart.Data(wavelength[i],MeanCenteringResult[0][i]));
+        }
+        //-------------------------Autoscaling--------------------------------
+        p.pre_ProcessingByAutoscaling();
+        AutoscalingResult=p.getAutoscalingResult();
+        seriesByAutoscaling=new XYChart.Series();
+        seriesByAutoscaling.setName("Spectrum(Autoscaling) " + (indexOfSpectra + 1));
+        for(int i=0;i<this.AutoscalingResult[0].length;i++){
+            seriesByAutoscaling.getData().add(new XYChart.Data(wavelength[i],AutoscalingResult[0][i]));
+        }
+        //------------------------------Normalizaiton---------------------------
+        p.pre_ProcessingByNormalization();
+        NormalizationResult=p.getNormalizationResult();
+        seriesByNormalization=new XYChart.Series();
+        seriesByNormalization.setName("Spectrum(Normalization) " + (indexOfSpectra + 1));
+        for(int i=0;i<this.NormalizationResult[0].length;i++){
+            seriesByNormalization.getData().add(new XYChart.Data(wavelength[i],NormalizationResult[0][i]));
+        }
+        //------------------------------Moving Window Smoothing---------------------------
+        p.pre_ProcessingByMovingWindowSmoothing();
+        MWSResult=p.getMovingWindowSmoothingResult();
+        seriesByMWS=new XYChart.Series();
+        seriesByMWS.setName("Spectrum(MWS) " + (indexOfSpectra + 1));
+        for(int i=0;i<this.MWSResult[0].length;i++){
+            seriesByMWS.getData().add(new XYChart.Data(wavelength[i],MWSResult[0][i]));
+        }
+        //------------------------------SG Smoothing---------------------------
+        p.pre_ProcessingBySGSmoothing();
+        SGResult=p.getSGSmoothingResult();
+        seriesBySG=new XYChart.Series();
+        seriesBySG.setName("Spectrum(SG) " + (indexOfSpectra + 1));
+        for(int i=0;i<this.SGResult[0].length;i++){
+            seriesBySG.getData().add(new XYChart.Data(wavelength[i],SGResult[0][i]));
+        }
+        /*
+        //------------------------------MSC---------------------------
+        p.pre_ProcessingByMSC();
+        MSCResult=p.getMSCResult();
+        seriesByMSC=new XYChart.Series();
+        seriesByMSC.setName("Spectrum(MSC) " + (indexOfSpectra + 1));
+        for(int i=0;i<this.MSCResult[0].length;i++){
+            seriesByMSC.getData().add(new XYChart.Data(wavelength[i],MSCResult[0][i]));
+        }
+        */
+        //display pre-processed spectrum on line chart
         pretreatedSpectrumChart.getData().clear();
-        pretreatedSpectrumChart.getData().add(seriesBySNV);
-        System.out.println("Pre-processing done");
+        pretreatedSpectrumChart.getData().addAll(seriesBySNV,seriesByMeanCentering,seriesByAutoscaling,seriesByNormalization,seriesByMWS,seriesBySG);
+        System.out.println("-----------------------Pre-processing done---------------------------");
     }
 
     /**
@@ -230,7 +311,7 @@ public class Controller {
         seriesByNone_PLS=new XYChart.Series();
         seriesByNone_PLS.setName("Urea(None)");
         for(int i=0;i<indexOfSpectra+1;i++) {
-            seriesByNone_PLS.getData().add(new XYChart.Data(i, historicalConcentrationByNone[0][i]));
+            seriesByNone_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByNone[0][i]));
         }
         System.out.println("No Pre-Processing_PLS done");
         //-----------------------------------------With Pro-Processing----------------------------------------------
@@ -242,13 +323,81 @@ public class Controller {
         seriesBySNV_PLS=new XYChart.Series();
         seriesBySNV_PLS.setName("Urea(SNV)");
         for(int i=0;i<indexOfSpectra+1;i++) {
-            seriesBySNV_PLS.getData().add(new XYChart.Data(i, historicalConcentrationBySNV[0][i]));
+            seriesBySNV_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationBySNV[0][i]));
         }
         System.out.println("SNV_PLS done");
-        //System.out.println("------------------5--------------------");
+        //----------------------------------------------Mean Centering-------------------------------------------------------
+        pls=new PLS_Algorithm(MeanCenteringResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationByMeanCentering[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesByMeanCentering_PLS=new XYChart.Series();
+        seriesByMeanCentering_PLS.setName("Urea(MeanCentering)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesByMeanCentering_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByMeanCentering[0][i]));
+        }
+        System.out.println("MeanCentering_PLS done");
+        //----------------------------------------------Autoscaling-------------------------------------------------------
+        pls=new PLS_Algorithm(AutoscalingResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationByAutoscaling[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesByAutoscaling_PLS=new XYChart.Series();
+        seriesByAutoscaling_PLS.setName("Urea(Autoscaling)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesByAutoscaling_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByAutoscaling[0][i]));
+        }
+        System.out.println("Autoscaling_PLS done");
+        //----------------------------------------------Normalization-------------------------------------------------------
+        pls=new PLS_Algorithm(NormalizationResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationByNormalization[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesByNormalization_PLS=new XYChart.Series();
+        seriesByNormalization_PLS.setName("Urea(Normalization)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesByNormalization_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByNormalization[0][i]));
+        }
+        System.out.println("Normalization_PLS done");
+        //----------------------------------------------Moving Window Smoothing-------------------------------------------------------
+        pls=new PLS_Algorithm(MWSResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationByMWS[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesByMWS_PLS=new XYChart.Series();
+        seriesByMWS_PLS.setName("Urea(MWS)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesByMWS_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByMWS[0][i]));
+        }
+        System.out.println("MWS_PLS done");
+        //----------------------------------------------SG-------------------------------------------------------
+        pls=new PLS_Algorithm(SGResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationBySG[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesBySG_PLS=new XYChart.Series();
+        seriesBySG_PLS.setName("Urea(SG)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesBySG_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationBySG[0][i]));
+        }
+        System.out.println("SG_PLS done");
+        //----------------------------------------------MSC-------------------------------------------------------
+        /*
+        pls=new PLS_Algorithm(MSCResult);
+        realTimeConcentration=pls.getConcentration();
+        historicalConcentrationByMSC[0][indexOfSpectra]=realTimeConcentration[0][0];
+        //set series
+        seriesByMSC_PLS=new XYChart.Series();
+        seriesByMSC_PLS.setName("Urea(MSC)");
+        for(int i=0;i<indexOfSpectra+1;i++) {
+            seriesByMSC_PLS.getData().add(new XYChart.Data(i+1, historicalConcentrationByMSC[0][i]));
+        }
+        System.out.println("MSC_PLS done");
+        */
+
         //display concentration on scatter chart
         concentrationChart.getData().clear();
-        concentrationChart.getData().addAll(seriesByNone_PLS,seriesBySNV_PLS);
-        System.out.println("Multivariate calibration done");
+        concentrationChart.getData().addAll(seriesByNone_PLS,seriesBySNV_PLS,seriesByMeanCentering_PLS,seriesByAutoscaling_PLS,seriesByNormalization_PLS,seriesByMWS_PLS,seriesBySG_PLS);
+        System.out.println("---------------------Multivariate calibration done--------------------------");
     }
 }
