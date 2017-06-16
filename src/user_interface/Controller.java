@@ -288,7 +288,7 @@ public class Controller {
 
         //display pre-processed spectrum on line chart
         pretreatedSpectrumChart.getData().clear();
-        pretreatedSpectrumChart.getData().addAll(seriesBySNV,seriesByMeanCentering,seriesByAutoscaling,seriesByNormalization,seriesByMWS,seriesBySG,seriesByMSC);
+        pretreatedSpectrumChart.getData().addAll(seriesBySNV,seriesByMeanCentering,seriesByAutoscaling,seriesByNormalization,seriesByMWS,seriesBySG,seriesByMSC  );
         System.out.println("-----------------------Pre-processing done---------------------------");
     }
 
