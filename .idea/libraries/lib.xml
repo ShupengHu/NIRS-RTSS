@@ -1,10 +1,22 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/lib" />
+      <root url="jar://$PROJECT_DIR$/lib/poi-ooxml-schemas-3.8-20120326.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/SNV_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/poi-3.8-20120326.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/dom4j-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Mean_Centering_Matlab.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/SG_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javabuilder.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/xmlbeans-2.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/MWS_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/MSC_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Normalization_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/PLS_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/poi-ooxml-3.8-20120326.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Autoscaling_MATLAB.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
   </library>
 </component>
