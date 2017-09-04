@@ -33,7 +33,7 @@ import java.io.InputStream;
  * 7.MSC
  * Created by hsp on 2017/6/14.
  */
-public class Pre_Processing {
+public class PreProcessing_Methods {
     private Object[] result;          //return of pre-processing methods from MATLAB
     private double[][] SNVResult;
     private double[][] Mean_CenteringResult;
@@ -44,7 +44,7 @@ public class Pre_Processing {
     private double[][] MSCResult;
     private double[] spectrum;
 
-    public Pre_Processing(double[] spectrum){
+    public PreProcessing_Methods(double[] spectrum){
         this.spectrum=spectrum;
     }
 
@@ -127,7 +127,7 @@ public class Pre_Processing {
         System.out.println("Autoscaling done");
     }
     /**
-     * Normalization 标准化
+     * Normalization 归一化
      * function [nx] = Normalization_MATLAB(x) x is real-time spectrum, nx is the spectrum pre-processed by Normalization
      * @throws MWException
      */

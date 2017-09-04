@@ -40,8 +40,9 @@ public class Spectrum_Input {
 
         //read all absorbance as input and store them into a two-dimensional array
         if (absorbanceFiles != null) {
-            spectra=new double[absorbanceFiles.length][numberOfVariables];
-        for(int i=0;i<absorbanceFiles.length;i++){
+            //spectra=new double[absorbanceFiles.length][numberOfVariables];
+            spectra=new double[5][numberOfVariables];
+        for(int i=0;i<5;i++){
             try {
                 s = new Scanner(absorbanceFiles[i]);
             } catch (FileNotFoundException e) {

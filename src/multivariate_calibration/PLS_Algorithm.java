@@ -39,7 +39,7 @@ public class PLS_Algorithm {
         //convert the return from MATLAB into two-dimensional double array
         MWNumericArray Result=(MWNumericArray) this.result[0];
         this.concentration=(double[][]) Result.toDoubleArray();
-        System.out.println("PLS done");
+        //System.out.println("PLS done");
     }
 
     /**

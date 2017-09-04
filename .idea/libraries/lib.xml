@@ -15,6 +15,8 @@
       <root url="jar://$PROJECT_DIR$/lib/PLS_MATLAB.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/poi-ooxml-3.8-20120326.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/Autoscaling_MATLAB.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/PCA_Score.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/Correlation_MATLAB.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

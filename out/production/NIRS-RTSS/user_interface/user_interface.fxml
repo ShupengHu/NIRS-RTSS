@@ -7,12 +7,14 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.Controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="980.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="user_interface.Controller">
    <children>
-      <LineChart fx:id="spectrumChart" createSymbols="false" layoutX="14.0" layoutY="50.0" title="Rear-Time Spectrum">
+      <LineChart fx:id="spectrumChart" createSymbols="false" layoutX="14.0" layoutY="50.0" prefHeight="458.0" prefWidth="731.0" title="Rear-Time Spectrum">
         <xAxis>
           <NumberAxis fx:id="spectrumXAxis" label="Wavelength(nm)" />
         </xAxis>
@@ -20,15 +22,7 @@
           <NumberAxis fx:id="spectrumYAxis" label="Absorbance" side="LEFT" />
         </yAxis>
       </LineChart>
-      <LineChart fx:id="spectraChart" createSymbols="false" layoutX="14.0" layoutY="473.0" prefHeight="425.0" prefWidth="635.0" title="Spectra">
-        <xAxis>
-          <NumberAxis fx:id="spectraXAxis" label="Wavelength(nm)" side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis fx:id="spectraYAxis" label="Absorbance" side="LEFT" />
-        </yAxis>
-      </LineChart>
-      <LineChart fx:id="pretreatedSpectrumChart" createSymbols="false" layoutX="550.0" layoutY="50.0" prefHeight="458.0" prefWidth="1045.0" title="Pre-Treated Spectrum">
+      <LineChart fx:id="pretreatedSpectrumChart" createSymbols="false" layoutX="755.0" layoutY="68.0" prefHeight="440.0" prefWidth="813.0" title="Pre-Treated Spectrum">
         <xAxis>
           <NumberAxis fx:id="pretreatedSpectrumXAxis" label="Wavelength(nm)" side="BOTTOM" />
         </xAxis>
@@ -55,14 +49,14 @@
           </Menu>
         </menus>
       </MenuBar>
-      <ToolBar fx:id="toolbar" layoutX="1192.0" prefHeight="40.0" prefWidth="408.0">
+      <ToolBar fx:id="toolbar" layoutX="1492.0" layoutY="10.0" prefHeight="40.0" prefWidth="408.0">
          <items>
             <Button fx:id="turnOnButton" mnemonicParsing="false" onAction="#onButtonClick" prefHeight="30.0" prefWidth="82.0" text="Turn on" />
             <Button fx:id="runButton" mnemonicParsing="false" onAction="#onButtonClick" text="Run" />
             <Button fx:id="stopButton" mnemonicParsing="false" onAction="#onButtonClick" text="Stop" />
          </items>
       </ToolBar>
-      <ScatterChart fx:id="concentrationChart" layoutX="717.0" layoutY="531.0" prefHeight="309.0" prefWidth="800.0" title="Concentration">
+      <ScatterChart fx:id="concentrationChart" layoutX="22.0" layoutY="568.0" prefHeight="309.0" prefWidth="800.0" title="Concentration">
         <xAxis>
           <NumberAxis fx:id="concentrationXAxis" side="BOTTOM" />
         </xAxis>
@@ -70,5 +64,14 @@
           <NumberAxis fx:id="concentrationYAxis" side="LEFT" />
         </yAxis>
       </ScatterChart>
+      <TableView fx:id="PCAScoreTable" layoutX="887.0" layoutY="539.0" prefHeight="392.0" prefWidth="800.0">
+        <columns>
+          <TableColumn fx:id="methodsColumn" prefWidth="201.0" text="Methods" />
+            <TableColumn fx:id="VCRColumn" prefWidth="177.0" text="VCR of PC1" />
+          <TableColumn fx:id="PCColumn" prefWidth="170.0" text="PCs(AVCR&gt;95%)" />
+            <TableColumn fx:id="coefficientColumn" prefWidth="122.0" text="r" />
+            <TableColumn fx:id="RsquaredColumn" prefWidth="134.0" text="R squared" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
